@@ -1,0 +1,33 @@
+name : Workflow for lint, test and deployment of the app
+
+on : push
+
+jobs :
+  test :
+    runs-on : ubuntu-latest
+    steps :
+      - name : Getting App Code
+        uses : actions/checkout@v3
+      - name : Installing Node JS
+        uses : actions/setup-node@v3
+        with :
+          node-version : 18
+      - name : Installing dependencies
+        run : npm ci
+      - nmae : Testing the application
+        run : npm test
+
+  deploy :
+    needs : test
+    runs-on : ubuntu-latest
+    steps :
+      - name : Getting the app code
+        uses : actions/checkout@v3
+      - name : Installing Node JS
+        uses : actions/setup-node@v3
+        with :
+          node-version : 18
+      - name : Installing Dependencies
+        run : npm install
+      - name : Deployment
+        run: echo "App Deployment by ${{ github.actor }}"
