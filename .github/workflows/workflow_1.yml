@@ -3,7 +3,19 @@ name : Workflow for lint, test and deployment of the app
 on : push
 
 jobs :
+  lint :
+    runs-on : ubuntu-latest
+    steps :
+      - name : Getting App Code
+        uses : actions/checkout@v3
+      - name : Installing Node JS
+        uses : actions/setup-node@v3
+      - name : Installing Dependencies
+        run : npm ci
+      - name : lint
+        run : npm run lint
   test :
+    needs : lint
     runs-on : ubuntu-latest
     steps :
       - name : Getting App Code
@@ -19,7 +31,7 @@ jobs :
 
 
   deploy :
-    needs : test
+    needs : ['lint','test']
     runs-on : ubuntu-latest
     steps :
       - name : Getting the app code
